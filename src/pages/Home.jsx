@@ -59,7 +59,28 @@ const Home = () => {
 
 useEffect(() => {
 fetchData();
-}, [])
+},[fetchData])
+
+useEffect(() => {
+    if (filterDate === 'All') {
+        setFilterData(data)
+      } 
+      else if(filterDate === 'today') {
+          const filtered = data.filter((val) => {
+              const date = new Date(val.Date);
+              return date === today;
+            });
+            setFilterData(filtered)
+      }
+      else if (filterDate === 'lastweek') {
+        const filtered = data.filter((val) => {
+          const date = new Date(val.Date);
+          return date >= lastWeek && date <= today;
+        });
+        setFilterData(filtered)
+      }
+}, [data, filterDate, today, lastWeek], Object.is)
+
 
 const getUpdatedData = () => {
     axios.get(`https://64214b3686992901b2afad2a.mockapi.io/crud`)
