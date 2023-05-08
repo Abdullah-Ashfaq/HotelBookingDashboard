@@ -13,6 +13,8 @@ import { MenuItem, TextField } from '@mui/material'
 import axios from 'axios';
 import '../Css/Home.css'
 
+
+
 const Home = () => {
     const [data, setData] = useState([])
     const [filterDate, setFilterDate] = useState('All')
@@ -41,6 +43,24 @@ const Home = () => {
           });
           setFilterData(filtered)
         }
+        else if (value === 'completed') {
+            const filtered = data.filter((val) => {
+              const date = new Date(val.Date);
+              const endTime = new Date(`${val.Date}T${val["End Time"]}`);
+            return endTime < today.getTime()
+              
+            });
+            setFilterData(filtered)
+          }
+          else if (value === 'pending') {
+            const filtered = data.filter((val) => {
+              const date = new Date(val.Date);
+              const endTime = new Date(`${val.Date}T${val["End Time"]}`);
+              return endTime > today.getTime()
+              
+            });
+            setFilterData(filtered)
+          }
       }
  
   
@@ -110,7 +130,7 @@ const getUpdatedData = () => {
               size='small'
               label='Filter'
               select
-              color='success'
+              color='secondary'
 
               sx={{
                 width:'220px',
@@ -119,6 +139,8 @@ const getUpdatedData = () => {
               onChange={handleSelectChange}>
               <MenuItem value='today'>Today</MenuItem>
               <MenuItem value='lastweek'>Last Week</MenuItem>
+              <MenuItem value='completed'>Completed</MenuItem>
+              <MenuItem value='pending'>Pending</MenuItem>
               <MenuItem value='All'>All</MenuItem>
             </TextField>
 
