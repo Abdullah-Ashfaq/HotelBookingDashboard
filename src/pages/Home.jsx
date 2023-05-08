@@ -99,6 +99,26 @@ useEffect(() => {
         });
         setFilterData(filtered)
       }
+
+      else if (filterDate === 'completed') {
+        const filtered = data.filter((val) => {
+          const date = new Date(val.Date);
+          const endTime = new Date(`${val.Date}T${val["End Time"]}`);
+        return endTime < today.getTime()
+          
+        });
+        setFilterData(filtered)
+      }
+      else if (filterDate === 'pending') {
+        const filtered = data.filter((val) => {
+          const date = new Date(val.Date);
+          const endTime = new Date(`${val.Date}T${val["End Time"]}`);
+          return endTime > today.getTime()
+          
+        });
+        setFilterData(filtered)
+      }
+
 }, [data, filterDate, today, lastWeek], Object.is)
 
 
