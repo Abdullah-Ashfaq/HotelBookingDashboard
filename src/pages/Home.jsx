@@ -54,7 +54,7 @@ const Home = () => {
         }
         else if (value === 'completed') {
             const filtered = data.filter((val) => {
-                const date = new Date(val.Date);
+                // const date = new Date(val.Date);
                 const endTime = new Date(`${val.Date}T${val["End Time"]}`);
                 return endTime < today.getTime()
 
@@ -63,7 +63,7 @@ const Home = () => {
         }
         else if (value === 'pending') {
             const filtered = data.filter((val) => {
-                const date = new Date(val.Date);
+                // const date = new Date(val.Date);
                 const endTime = new Date(`${val.Date}T${val["End Time"]}`);
                 return endTime > today.getTime()
 
@@ -99,7 +99,7 @@ const Home = () => {
                 const date = new Date(val.Date);
                 console.log("todays option", date)
                 console.log("todays date", today)
-                if (date === today) {
+                if (date.getDate() === today.getDate()) {
                     console.log("date matched")
                     return date;
                 }
