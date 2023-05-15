@@ -20,6 +20,7 @@ const Home = () => {
     const [data, setData] = useState([])
     const [filterDate, setFilterDate] = useState('All')
     const [filterData, setFilterData] = useState([])
+    const [revenue, setRevenue] = useState(0)
 
     const today = useMemo(() => new Date(), []);
     const lastWeek = useMemo(() => {
@@ -78,7 +79,6 @@ const Home = () => {
         try {
             const response = await axios.get(`https://64589c7c4eb3f674df784d5d.mockapi.io/Users`);
             setData(response.data)
-            console.log("data is here", data)
 
         } catch (error) {
             console.log("Error while fetching the packages from an api")
@@ -116,7 +116,6 @@ const Home = () => {
             const filtered = data.filter((val) => {
                 const date = new Date(val.Date);
                 if (date >= lastWeek && date < today) {
-                    console.log("last week days", date)
                     return date;
                 } else {
                     console.log("no data of last week")
@@ -131,8 +130,7 @@ const Home = () => {
                 // const date = new Date(val.Date);
                 const endTime = new Date(`${val.Date}T${val["End Time"]}`);
                 if (today.getTime() > endTime) {
-                    console.log("completed time", endTime)
-                    console.log("todays current time and date", today.getTime())
+
                     return endTime
                 }
                 else {
@@ -159,8 +157,13 @@ const Home = () => {
             setFilterData(filtered)
         }
 
+
     }, [data, filterDate, today, lastWeek], Object.is)
 
+    useEffect(() => {
+        const sum = filterData.reduce((acc, item) => acc + item.Price, 0);
+        setRevenue(sum);
+    }, [filterData]);
 
     const getUpdatedData = () => {
         axios.get(`https://64589c7c4eb3f674df784d5d.mockapi.io/Users`)
@@ -211,7 +214,7 @@ const Home = () => {
 
 
             </div>
-            <TableContainer component={Paper} className='table'>
+            <TableContainer component={Paper} className='table' sx={{ marginBottom: "5rem" }}>
                 <Table >
                     <TableHead>
                         <TableRow >
@@ -223,7 +226,6 @@ const Home = () => {
                             <TableCell align="right">Duration</TableCell>
                             <TableCell align="right">End Time</TableCell>
                             <TableCell align="right">Price</TableCell>
-                            {/* <TableCell align="right">Update</TableCell> */}
                             <TableCell align="right">Delete</TableCell>
                         </TableRow>
                     </TableHead>
@@ -239,15 +241,14 @@ const Home = () => {
                                     <TableCell align="right">{val.Duration}</TableCell>
                                     <TableCell align="right">{val["End Time"]}</TableCell>
                                     <TableCell align="right">{val.Price}</TableCell>
-                                    {/* <TableCell align="right"><Button size='small' variant='contained'>Update</Button></TableCell> */}
                                     <TableCell align="right"><Button size='small' variant='contained' onClick={() => onDelete(val.id)}>delete</Button></TableCell>
 
                                 </TableRow>
-
                             </>
                         })}
-
-
+                         <TableRow>
+                                    <TableCell align="right" colSpan={8}>{`Revenue: ${revenue}`}</TableCell>
+                                </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -258,3 +259,4 @@ const Home = () => {
 }
 
 export default Home
+
