@@ -14,8 +14,6 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import axios from 'axios';
 import '../Css/Home.css'
 
-
-
 const Home = () => {
     const [data, setData] = useState([])
     const [filterDate, setFilterDate] = useState('All')
@@ -28,52 +26,12 @@ const Home = () => {
         d.setDate(d.getDate() - 7);
         return d;
     }, []);
-    // console.log("today's date",today)
-    // console.log("last week", lastWeek)
 
 
     const handleSelectChange = (event) => {
         const value = event.target.value
         setFilterDate(value)
-        if (value === 'All') {
-            setFilterData(data)
-        }
-        else if (value === 'today') {
-            const filtered = data.filter((val) => {
-                const date = new Date(val.Date);
-                return date === today;
-
-            });
-            setFilterData(filtered)
-        }
-        else if (value === 'lastweek') {
-            const filtered = data.filter((val) => {
-                const date = new Date(val.Date);
-                return date >= lastWeek && date < today;
-            });
-            setFilterData(filtered)
-        }
-        else if (value === 'completed') {
-            const filtered = data.filter((val) => {
-                // const date = new Date(val.Date);
-                const endTime = new Date(`${val.Date}T${val["End Time"]}`);
-                return endTime < today.getTime()
-
-            });
-            setFilterData(filtered)
-        }
-        else if (value === 'pending') {
-            const filtered = data.filter((val) => {
-                // const date = new Date(val.Date);
-                const endTime = new Date(`${val.Date}T${val["End Time"]}`);
-                return endTime > today.getTime()
-
-            });
-            setFilterData(filtered)
-        }
     }
-
-
 
     const fetchData = useCallback(async () => {
         try {
@@ -81,14 +39,17 @@ const Home = () => {
             setData(response.data)
 
         } catch (error) {
-            console.log("Error while fetching the packages from an api")
+            console.log("Error while fetching the data from an api")
         }
 
     }, []);
 
+
     useEffect(() => {
         fetchData();
     }, [fetchData])
+
+
 
     useEffect(() => {
         if (filterDate === 'All') {
@@ -103,12 +64,6 @@ const Home = () => {
                     console.log("date matched")
                     return date;
                 }
-                else {
-                    console.log("not matched")
-                }
-
-
-
             });
             setFilterData(filtered)
         }
@@ -117,26 +72,17 @@ const Home = () => {
                 const date = new Date(val.Date);
                 if (date >= lastWeek && date < today) {
                     return date;
-                } else {
-                    console.log("no data of last week")
                 }
-
             });
             setFilterData(filtered)
         }
 
         else if (filterDate === 'completed') {
             const filtered = data.filter((val) => {
-                // const date = new Date(val.Date);
                 const endTime = new Date(`${val.Date}T${val["End Time"]}`);
                 if (today.getTime() > endTime) {
-
                     return endTime
                 }
-                else {
-                    console.log("no completed date yet")
-                }
-
             });
             setFilterData(filtered)
         }
@@ -145,32 +91,24 @@ const Home = () => {
                 // const date = new Date(val.Date);
                 const endTime = new Date(`${val.Date}T${val["End Time"]}`);
                 if (endTime > today.getTime()) {
-                    console.log("pending date", endTime)
                     return endTime
                 }
-                else {
-                    console.log("no current pending dates")
-                }
-
-
             });
             setFilterData(filtered)
         }
-
-
     }, [data, filterDate, today, lastWeek], Object.is)
+
 
     useEffect(() => {
         const sum = filterData.reduce((acc, item) => acc + item.Price, 0);
         setRevenue(sum);
     }, [filterData]);
 
+
     const getUpdatedData = () => {
         axios.get(`https://64589c7c4eb3f674df784d5d.mockapi.io/Users`)
             .then((response) => {
                 setData(response.data)
-
-
             })
     }
 
@@ -178,8 +116,6 @@ const Home = () => {
         axios.delete(`https://64589c7c4eb3f674df784d5d.mockapi.io/Users/${id}`)
             .then(() => {
                 getUpdatedData();
-
-
             })
     }
     return (
@@ -246,9 +182,9 @@ const Home = () => {
                                 </TableRow>
                             </>
                         })}
-                         <TableRow>
-                                    <TableCell align="right" colSpan={8}>{`Revenue: ${revenue}`}</TableCell>
-                                </TableRow>
+                        <TableRow>
+                            <TableCell align="right" colSpan={8}>{`Revenue: ${revenue}`}</TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
