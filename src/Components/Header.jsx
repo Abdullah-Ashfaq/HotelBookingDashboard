@@ -5,9 +5,9 @@ const Header = () => {
   return (
     <>
     <div className="header">
-      <img src="logo.png" alt="" className="logo" />
+      <img src="logo.jpg" alt="" className="logo" />
       <div className="heading">
-        The Hall Booking System
+      MEGA ARENA
       </div>
     </div>
     
