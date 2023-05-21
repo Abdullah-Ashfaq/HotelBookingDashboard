@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: 0.7rem;
     position: fixed;
     top: 0;
     z-index: 1;
@@ -23,11 +23,29 @@
 }
 .heading {
     color: white;
-    font-size: 42px;
+    font-size: 35px;
     font-family: 'Kanit', sans-serif;
-    letter-spacing: 4px;
+    letter-spacing: 2px;
     font-weight: 600;
-    margin-top: 10px;
-
+    /* margin-top: 10px;    */
+}
+.heading::first-letter {
+    font-size: 68px;
+    font-weight: 200;
+}
+@media(max-width: 780px) {
+.header {
+    padding-left: 15px;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+.heading {
+    font-size: 32px;
+    letter-spacing: 2px;
+}
+.heading::first-letter {
+    font-size: 68px;
+    font-weight: 200;
     
+}
 }
