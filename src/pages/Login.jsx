@@ -35,9 +35,10 @@ const Login = ({ onLogin }) => {
     <div className="container">
       <div className="login-form">
 
-        <IconButton disableRipple>
+        {/* <IconButton disableRipple>
           <LoginOutlinedIcon fontSize='large' color='primary' />
-        </IconButton>
+        </IconButton> */}
+        <img src="logo.jpg" style={{height: "4rem", width: "4rem", objectFit: "contain", borderRadius: "10px", cursor:"pointer"}} alt="" />
 
         <form
           onSubmit={handleLoginForm}
